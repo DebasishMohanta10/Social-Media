@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% block title %} TIL | Edit {{user.username}} {% endblock %}
+{% block content %}
+    <div>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+            {{profile_form.as_p}}
+            <button type='submit'>save</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% block title %}TIL | {{post.title|truncatechars:20}}{% endblock %}
+
+{% block content %}
+    <div class="max-w-4xl px-10 my-4 py-6 bg-white rounded-lg shadow-md">
+            <div class="flex justify-between items-center">
+                <span class="font-light text-gray-600">{{post.date}}</span>
+                <!-- <a class="px-2 py-1 bg-gray-600 text-gray-100 font-bold rounded hover:bg-gray-500" href="#">Design</a> -->
+            </div>
+            <div class="mt-2">
+                <a class="text-2xl text-gray-700 font-bold hover:text-gray-600" href="#">{{post.title}}</a>
+                <p class="mt-2 text-gray-600">{{post.text}}</p>
+            </div>
+            <div class="flex justify-between items-center mt-4">
+                <!-- <a class="text-blue-600 hover:underline" href="{% url 'post_detail' post.id %}">Read more</a> -->
+                <p></p>
+                <div>
+                    <a class="flex items-center" href="{% url 'profile_detail' post.author.username  %}">
+                        {% thumbnail post.author.profile.image "373x372" crop="center" as im %}
+                        <img class="mx-4 w-10 h-10 object-cover rounded-full hidden sm:block" src="{{im.url}}" alt="avatar">
+                        {% endthumbnail %}
+                        <h1 class="text-gray-700 font-bold">{{post.author.username}}</h1>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-8">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{form}}
+                <button type="submit" class="mt-4 bg-purple-500 text-white py-2 px-6 rounded-md hover:bg-purple-600">Add Comment</button>
+            </form>
+        </div>
+
+        <div class="p-8">
+            <h1 class="text-lg">Comments({{post.comments.count}}):</h1>
+            {% for comment in post.comments.all %}
+                <div>
+                    <p><small>{{comment.created_time}}</small></p>
+                    <h6 class="text-sm font-bold"><a style="text-decoration: none;color:black;" href="{% url 'profile_detail' request.user.username %}">{{comment.user.username}}</a></h6>
+                    <p>{{comment.text}}</p>
+                </div>
+            {% empty %}
+                <div>
+                    <p class="text-sm">No Comments Yet.</p>
+                </div>
+            {% endfor %}
+        </div>
+
+{% endblock %}
